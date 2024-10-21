@@ -1,0 +1,32 @@
+.modal-wishlist-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modal-wishlist-block {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.modal-wishlist-main {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.close-btn {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

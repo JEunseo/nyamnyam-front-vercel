@@ -1,62 +1,32 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import './globals.css';
+import StoreProvider from './StoreProvider';
+import { useSearchContext } from './components/SearchContext';
+import { useEffect, useState } from 'react';
+import TabFeatures from './(page)/restaurant/page';
+import { useRouter } from 'next/navigation';
+import Home from './(page)/home/page';
 
-export default function Home2() {
-    const [data, setData] = useState({ hotelList: [] });
+const Page = () => {
+    const { searchTerm } = useSearchContext();
+    const [isTabVisible, setIsTabVisible] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
-        fetch('http://211.188.50.43:8080/restaurant/findAll')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setData({ hotelList: data });
-            })
-            .catch((error) => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
-    }, []);
-
-    const fcAlert = () => {
-        alert('Insert page로 이동합니다');
-        window.location.href = "/restaurant/register";
-    }
+        if (searchTerm) {
+            setIsTabVisible(false);
+            router.push('/home'); // 검색어가 있을 때 Home으로 리디렉션
+        } else {
+            setIsTabVisible(true);
+            router.push('/'); // 검색어가 없을 때 TabFeatures로 이동
+        }
+    }, [searchTerm]);
 
     return (
-        <main className="flex min-h-screen flex-col items-center p-6 bg-gray-100">
-            <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
-                <button
-                    className="mb-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    onClick={fcAlert}
-                >
-                    Go Save
-                </button>
-                <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-                    <thead>
-                        <tr className="bg-blue-600 text-white">
-                            <th className="py-3 px-4 border-b">Index</th>
-                            <th className="py-3 px-4 border-b">Name</th>
-                            <th className="py-3 px-4 border-b">Tel</th>
-                            <th className="py-3 px-4 border-b">Address</th>
-                            <th className="py-3 px-4 border-b">OperateDate</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.hotelList.map((h, index) => (
-                            <tr key={index} className="hover:bg-gray-100">
-                                <td className="py-3 px-4 border-b">{index}</td>
-                                <td className="py-3 px-4 border-b">{h.name}</td>
-                                <td className="py-3 px-4 border-b">{h.tel}</td>
-                                <td className="py-3 px-4 border-b">{h.address}</td>
-                                <td className="py-3 px-4 border-b">{h.operateTime}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </main>
+        <StoreProvider>
+            {isTabVisible ? <TabFeatures start={0} limit={10} /> : <Home />}
+        </StoreProvider>
     );
-}
+};
+
+export default Page;

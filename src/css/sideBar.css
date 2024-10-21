@@ -1,0 +1,10 @@
+@media screen and (max-width: 767px) {
+    #aside {
+      margin-top: 0 !important;
+    }
+  }
+  
+  #aside {
+    transition: margin-top 0.5s ease-in-out 0s, right 0.5s;
+  }
+  

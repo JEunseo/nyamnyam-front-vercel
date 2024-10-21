@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="49786053-a601-4996-9fe6-17ac685f1975" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="release0.08" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;JEunseo&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/nyamnyam-kr/nyamnyam-front.git&quot;,
+    &quot;accountId&quot;: &quot;1834116f-019d-451b-a5b8-17ef5bf3cd86&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2mKXWhchfbj0WfBytJDO1CpkFBN" />
+  <component name="ProjectViewState">
+    <option name="flattenPackages" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "vercelFront",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/bitcamp/team/release/nyamnyam-front",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "ts.external.directory.path": "C:\\Users\\USER\\Documents\\nyamnyam\\nyamnyam-front\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Documents\nyamnyam\nyamnyam-front\src\app\(page)\notice\details\[id]" />
+      <recent name="C:\Users\USER\Documents\nyamnyam\nyamnyam-front\src\app\model" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Documents\nyamnyam\nyamnyam-front\src\app\(page)\user\dashBoard\[id]" />
+      <recent name="C:\Users\USER\Documents\nyamnyam\nyamnyam-front\src\app\(page)\user\mypage\[id]" />
+      <recent name="C:\Users\bitcamp\Documents\GitHub\nyamnyam-front\src\app\components" />
+      <recent name="C:\Users\USER\Documents\nyamnyam\nyamnyam-front\src\app\(page)\user\wallet\[id]" />
+      <recent name="C:\Users\USER\Documents\nyamnyam\nyamnyam-front\src\app\(page)\admin" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="49786053-a601-4996-9fe6-17ac685f1975" name="Changes" comment="" />
+      <created>1726826275100</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1726826275100</updated>
+      <workItem from="1726826276195" duration="7708000" />
+      <workItem from="1726883651419" duration="452000" />
+      <workItem from="1726884541066" duration="591000" />
+      <workItem from="1726885225455" duration="17262000" />
+      <workItem from="1726928348308" duration="5001000" />
+      <workItem from="1726934266646" duration="126000" />
+      <workItem from="1726978994191" duration="8737000" />
+      <workItem from="1727138171568" duration="608000" />
+      <workItem from="1727156412037" duration="2245000" />
+      <workItem from="1727161906772" duration="196000" />
+      <workItem from="1727162275180" duration="665000" />
+      <workItem from="1727166685124" duration="4376000" />
+      <workItem from="1727171750349" duration="3804000" />
+      <workItem from="1727181552545" duration="269000" />
+      <workItem from="1727181945480" duration="197000" />
+      <workItem from="1727248575980" duration="3339000" />
+      <workItem from="1727760431335" duration="1482000" />
+      <workItem from="1727842601005" duration="71000" />
+      <workItem from="1728039836379" duration="732000" />
+      <workItem from="1728099778167" duration="187000" />
+      <workItem from="1728110739533" duration="203000" />
+      <workItem from="1728280154645" duration="61000" />
+      <workItem from="1728529597572" duration="17588000" />
+      <workItem from="1728380955440" duration="817000" />
+      <workItem from="1728519810430" duration="40000" />
+      <workItem from="1728619489876" duration="6000" />
+      <workItem from="1728619506858" duration="652000" />
+      <workItem from="1728638525159" duration="857000" />
+      <workItem from="1728643549463" duration="460000" />
+      <workItem from="1728703500768" duration="298000" />
+      <workItem from="1728739600443" duration="814000" />
+      <workItem from="1728806892738" duration="4754000" />
+      <workItem from="1728883228374" duration="8496000" />
+      <workItem from="1728904203893" duration="5029000" />
+      <workItem from="1728952929892" duration="4347000" />
+      <workItem from="1728969248517" duration="2873000" />
+      <workItem from="1728989962295" duration="171000" />
+      <workItem from="1729212065738" duration="6194000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

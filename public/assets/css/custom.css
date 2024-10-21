@@ -1,0 +1,50 @@
+html .rainbow .close {
+	color: inherit !important;
+	float: none !important;
+	font-family: inherit !important;
+	font-size: 14px;
+	font-weight: normal !important;
+	opacity: 1 !important;
+	text-shadow: inherit !important;
+}
+
+
+pre  {
+    min-height: 80px;
+}
+
+.language-name{
+    display: none;
+}
+
+
+html .clipboard-copy {
+    top: 10px;
+    background: #2E56D9 !important;
+}
+
+
+html .clipboard-copy:hover{
+    opacity: 0.8;
+    
+}
+
+.pp-info{
+    padding: 10px 20px;
+    border: 1px solid #f5f6f7;
+    background-color: #fcfcfc;
+}
+
+
+html pre,html  code {
+    font-family: Consolas, 'Liberation Mono', Courier, monospace;
+    color: #333;
+    background: #fcfcfc;
+    border-radius: 0;
+}
+
+html  pre{
+    border: 1px solid #f5f6f7;
+    background-color: #fcfcfc;
+    padding: 20px;
+}
