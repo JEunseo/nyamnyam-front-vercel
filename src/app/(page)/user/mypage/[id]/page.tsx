@@ -1,29 +1,29 @@
 "use client";
-import React, {useEffect, useState} from "react";
-import {fetchInsertOpinion} from "@/app/service/opinion/opinion.serivce";
-import Image from 'next/image'
+import React, { useEffect, useState } from "react";
+import Image from 'next/image';
 import Link from "next/link";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import {fetchShowCount} from "@/app/service/admin/admin.service";
-import {fetchShowFollower, fetchShowFollowing} from "@/app/service/follow/follow.service";
-import {Area, CountItem, RestaurantList, UserPostModel} from "@/app/model/dash.model";
-import {OpinionModel} from "@/app/model/opinion.model";
-import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip} from "chart.js";
+import { fetchShowCount } from "@/app/service/admin/admin.service";
+import { fetchShowFollower, fetchShowFollowing } from "@/app/service/follow/follow.service";
+import { CountItem, RestaurantList, UserPostModel } from "@/app/model/dash.model";
+import { OpinionModel } from "@/app/model/opinion.model";
+import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
 import styles from "@/css/mypage.module.css";
-import {Bar, Doughnut} from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import MyCalendar from "@/app/(page)/user/calendar/[id]/page";
 import MyWallet from "@/app/(page)/user/wallet/[id]/page";
 import nookies from "nookies";
-import {fetchPostList} from "@/app/service/post/post.service";
-import {useSearchContext} from "@/app/components/SearchContext";
-import {usePathname, useRouter} from "next/navigation";
+import { fetchPostList } from "@/app/service/post/post.service";
+import { useSearchContext } from "@/app/components/SearchContext";
+import { usePathname, useRouter } from "next/navigation";
 import UserDash from "@/app/(page)/user/dashBoard/[id]/page";
-import {FollowModel} from "@/app/model/follow.model";
-import {fetchUserById} from "@/app/api/user/user.api";
-import {User} from "@/app/model/user.model";
-import followList from "@/app/(page)/user/follow/page";
+import { FollowModel } from "@/app/model/follow.model";
+import { fetchUserById} from "@/app/api/user/user.api";
+import { User } from "@/app/model/user.model";
 import FollowList from "@/app/(page)/user/follow/page";
-
+import {fetchInsertOpinion} from "@/app/service/opinion/opinion.serivce";
+import {removeUserById} from "@/app/service/user/user.service";
+import EditProfile from "@/app/(page)/user/update/page";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, CategoryScale, LinearScale);
 
@@ -31,28 +31,24 @@ export default function MyPage() {
     const [count, setCount] = useState<CountItem[]>([]);
     const [restaurant, setRestaurant] = useState<RestaurantList[]>([]);
     const [post, setPost] = useState<UserPostModel[]>([]);
-    const [activeTab, setActiveTab] = useState<string | undefined>('myPage')
+    const [activeTab, setActiveTab] = useState<string | undefined>('myPage');
     const [user, setUser] = useState<User | null>(null);
     const [follower, setFollower] = useState<FollowModel[]>([]);
     const [following, setFollowing] = useState<FollowModel[]>([]);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-
-    const {searchTerm} = useSearchContext();
+    const { searchTerm } = useSearchContext();
     const router = useRouter();
     const pathname = usePathname();
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
     const cookies = nookies.get();
     const userId = cookies.userId;
-
     const id = pathname?.split('/')[3];
-
 
     useEffect(() => {
         const fetchUser = async () => {
-            const userData = await fetchUserById(userId); // await 추가
+            const userData = await fetchUserById(userId);
             setUser(userData);
         };
-
         fetchUser();
 
         if (userId) {
@@ -84,12 +80,10 @@ export default function MyPage() {
                 setFollowing(data2);
             }
         };
-
         follow();
     }, [user]);
 
 
-    const totalFollower = follower.length;
 
     useEffect(() => {
         if (searchTerm && !isInitialLoad) {
@@ -114,7 +108,7 @@ export default function MyPage() {
             const result = await fetchInsertOpinion(report);
             if (result) {
                 alert('의견이 성공적으로 제출되었습니다.');
-                setContent(""); // Clear the textarea after submission
+                setContent("");
             } else {
                 alert('의견 제출에 실패하였습니다.');
             }
@@ -128,6 +122,20 @@ export default function MyPage() {
         e.preventDefault();
         if (window.confirm("냠냠에 의견을 보낼까요?")) {
             submit(content);
+        }
+    };
+
+    // 회원 탈퇴 함수
+    const handleDeleteAccount = async () => {
+        if (window.confirm("정말 탈퇴하시겠습니까?")) {
+            try {
+                await removeUserById(userId);
+                alert("회원 탈퇴가 완료되었습니다.");
+                router.push("/"); // 탈퇴 후 메인 페이지로 이동
+            } catch (error) {
+                console.error("회원 탈퇴 실패:", error);
+                alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
+            }
         }
     };
 
@@ -157,6 +165,8 @@ export default function MyPage() {
         }],
     };
 
+
+    const totalFollower = follower.length;
     const totalPost = post.length;
 
     if (!userId || id !== userId) {
@@ -170,13 +180,11 @@ export default function MyPage() {
 
     return (
         <>
-
             <div className="profile-block md:py-20 py-10 mt-10">
                 <div className="container">
                     <div className="content-main flex gap-y-8 max-md:flex-col w-full">
                         <div className="left md:w-1/3 w-full xl:pr-[3.125rem] lg:pr-[28px] md:pr-[16px]">
-                            <div
-                                className="user-infor bg-surface lg:px-7 px-4 lg:py-10 py-5 md:rounded-[20px] rounded-xl">
+                            <div className="user-infor bg-surface lg:px-7 px-4 lg:py-10 py-5 md:rounded-[20px] rounded-xl">
                                 <div className="heading flex flex-col items-center justify-center">
                                     <div className="avatar">
                                         <Image
@@ -188,8 +196,8 @@ export default function MyPage() {
                                         />
                                     </div>
                                     <div className="name heading6 mt-4 text-center">{user?.nickname}</div>
-                                    <div
-                                        className="mail heading6 font-normal normal-case text-secondary text-center mt-1">hi.avitex@gmail.com
+                                    <div className="mail heading6 font-normal normal-case text-secondary text-center mt-1">
+                                        hi.avitex@gmail.com
                                     </div>
                                 </div>
                                 <div className="menu-tab w-full max-w-none lg:mt-10 mt-6">
@@ -234,15 +242,20 @@ export default function MyPage() {
                                         <Icon.SignOut size={20}/>
                                         <strong className="heading6">Logout</strong>
                                     </Link>
+                                    <button
+                                        onClick={handleDeleteAccount}
+                                        className="item flex items-center gap-3 w-full px-5 py-4 rounded-lg cursor-pointer duration-300 mt-1.5"
+                                        style={{ backgroundColor: '#FF0000', color: '#FFFFFF' }}>
+                                        <Icon.Trash size={20} />
+                                        <strong className="heading6">회원 탈퇴</strong>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         <div className="right md:w-2/3 w-full pl-2.5">
-                            <div
-                                className={`tab text-content w-full ${activeTab === 'myPage' ? 'block' : 'hidden'}`}>
+                            <div className={`tab text-content w-full ${activeTab === 'myPage' ? 'block' : 'hidden'}`}>
                                 <div className="overview grid sm:grid-cols-3 gap-5 mt-7 ">
-                                    <div
-                                        className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs w-full ">
+                                    <div className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs w-full ">
                                         <Link href="/receipt/insertReceipt">
                                             <div className="counter">
                                                 <span className="tese text-orange-700">Receipt</span>
@@ -251,16 +264,14 @@ export default function MyPage() {
                                         </Link>
                                         <Icon.Barcode className='text-4xl'/>
                                     </div>
-                                    <div
-                                        className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs">
+                                    <div className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs">
                                         <div className="counter">
                                             <span className="tese">Total Post</span>
                                             <h5 className="heading5 mt-1">{totalPost}</h5>
                                         </div>
                                         <Icon.NotePencil className='text-4xl'/>
                                     </div>
-                                    <div
-                                        className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs">
+                                    <div className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs">
                                         <div className="counter">
                                             <span className="tese">MY FOLLOWER</span>
                                             <h5 className="heading5 mt-1">{totalFollower}</h5>
@@ -271,7 +282,6 @@ export default function MyPage() {
                                 <div className="recent_order pt-5 px-5 pb-2 mt-7 border border-line rounded-xl">
                                     <div>
                                         <div className={styles.cardHeader}>TOTAL POST USER RANKING</div>
-                                        <div></div>
                                     </div>
                                     <div className={styles.cardBody}>
                                         <div className={styles.chartContainer}>
@@ -290,108 +300,82 @@ export default function MyPage() {
                                     </div>
                                     <h6 className="heading6"> MY POST </h6>
                                     <div className="list overflow-x-auto w-full mt-5">
-                                        <table
-                                            className="w-full max-[1400px]:w-[700px] max-md:w-[700px] text-center text-sm">
+                                        <table className="w-full max-[1400px]:w-[700px] max-md:w-[700px] text-center text-sm">
                                             <thead className="border-b border-line">
                                             <tr className="text-center">
-                                                <th scope="col"
-                                                    className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">음식점
-                                                </th>
-                                                <th scope="col"
-                                                    className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">내용
-                                                </th>
-                                                <th scope="col"
-                                                    className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">작성날짜
-                                                </th>
-                                                <th scope="col"
-                                                    className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">좋아요
-                                                    수
-                                                </th>
+                                                <th scope="col" className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">음식점</th>
+                                                <th scope="col" className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">내용</th>
+                                                <th scope="col" className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">작성날짜</th>
+                                                <th scope="col" className="pb-3 text-sm font-bold uppercase text-secondary whitespace-nowrap">좋아요 수</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             {post.map(p => (
-                                                <tr key={p.postId}
-                                                    className="item duration-300 border-b border-line h-auto">
-                                                    <Link className=" text-sm text-secondary"
-                                                          href={`/restaurant/${p.restaurantId}`}>
-                                                        <th scope="row"
-                                                            className="py-3 whitespace-nowrap overflow-hidden text-ellipsis">
-                                                                <span
-                                                                    className="tag px-4 py-1.5 rounded-full bg-orange-100 text-orange font-semibold text-sm">
-                                                                      {p.name}
+                                                <tr key={p.postId} className="item duration-300 border-b border-line h-auto">
+                                                    <Link className="text-sm text-secondary" href={`/restaurant/${p.restaurantId}`}>
+                                                        <th scope="row" className="py-3 whitespace-nowrap overflow-hidden text-ellipsis">
+                                                                <span className="tag px-4 py-1.5 rounded-full bg-orange-100 text-orange font-semibold text-sm">
+                                                                    {p.name}
                                                                 </span>
                                                         </th>
                                                     </Link>
                                                     <td className="py-3 text-left">
-                                                        <div className="info flex flex-col font-bold text-sm">
-                                                            {p.content}
-                                                        </div>
+                                                        <div className="info flex flex-col font-bold text-sm">{p.content}</div>
                                                     </td>
                                                     <td className="py-3 price">
                                                         {new Date(p.entryDate).toISOString().slice(0, 19).replace('T', ' ')}
                                                     </td>
                                                     <td className="py-3">
-                                                        <div className="info flex flex-col">
-                                                            {p.upvoteCount}
-                                                        </div>
+                                                        <div className="info flex flex-col">{p.upvoteCount}</div>
                                                     </td>
                                                 </tr>
                                             ))}
-
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                className={`tab text-content overflow-hidden w-full h-auto p-7 mt-7 border border-line rounded-xl ${activeTab === 'myWallet' ? 'block' : 'hidden'}`}>
+                            <div className={`tab text-content overflow-hidden w-full h-auto p-7 mt-7 border border-line rounded-xl ${activeTab === 'myWallet' ? 'block' : 'hidden'}`}>
                                 <h6 className="heading6">My Wallet</h6>
                                 <div className="mb-10"><MyCalendar/></div>
                                 <div><MyWallet/></div>
                             </div>
-                            <div
-                                className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'follow' ? 'block' : 'hidden'}`}>
+                            <div className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'follow' ? 'block' : 'hidden'}`}>
                                 <h6 className="heading6">Follow</h6>
                                 <FollowList/>
                             </div>
-                            <div
-                                className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'dash' ? 'block' : 'hidden'}`}>
+                            <div className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'dash' ? 'block' : 'hidden'}`}>
                                 <h6 className="heading6">DashBoard</h6>
                                 <UserDash/>
                             </div>
-                            <div
-                                className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'opinion' ? 'block' : 'hidden'}`}>
+                            <div className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'opinion' ? 'block' : 'hidden'}`}>
                                 <h6 className="heading6">My Opinion</h6>
                                 <h2 className="text-lg font-semibold text-gray-800 mb-2">냠냠에 전하고 싶은 의견이 있나요?</h2>
                                 <h2 className="text-md text-gray-600 mb-4">00님의 소중한 의견을 꼼꼼히 읽어볼게요</h2>
                                 <form onSubmit={handleSubmit}>
-                             <textarea
-                                 value={content}
-                                 onChange={(e) => setContent(e.target.value)}
-                                 placeholder="여기에 의견을 남겨주세요"
-                                 rows={4}
-                                 className="w-full border border-gray-300 rounded-md p-2 mb-2"
-                                 style={{borderBottom: '2px solid #ccc', marginBottom: '10px'}}
-                             />
+                                    <textarea
+                                        value={content}
+                                        onChange={(e) => setContent(e.target.value)}
+                                        placeholder="여기에 의견을 남겨주세요"
+                                        rows={4}
+                                        className="w-full border border-gray-300 rounded-md p-2 mb-2"
+                                        style={{ borderBottom: '2px solid #ccc', marginBottom: '10px' }}
+                                    />
                                     <button
                                         type="submit"
                                         className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
-                                    >제출
+                                    >
+                                        제출
                                     </button>
                                 </form>
                             </div>
-                            <div
-                                className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'edit' ? 'block' : 'hidden'}`}>
-
+                            <div className={`tab text-content overflow-hidden w-full p-7 mt-7 border border-line rounded-xl ${activeTab === 'edit' ? 'block' : 'hidden'}`}>
+                                {user && <EditProfile user={user} />}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-    )
-
-
+    );
 }
-
