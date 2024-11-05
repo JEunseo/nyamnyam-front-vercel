@@ -3,27 +3,8 @@ import { deleteChatRoomApi, fetchChatRoomById, fetchChatRoomCount, fetchChatRoom
 import { ChatRoomModel } from "src/app/model/chatRoom.model";
 import {customFetch} from "@/app/service/user/fetchClient";
 
-export async function insertChatRoom(chatRoom: ChatRoomModel): Promise<any | { status: number }> {
-  try {
-    // customFetch 사용
-    const response = await customFetch('http://localhost:8080/api/chatRoom/save', {
-      method: 'POST',
-      body: JSON.stringify(chatRoom)
-    });
 
-    if (!response.ok) {
-      const errorData = await response.json(); // 오류 메시지 확인
-      console.error('Error response:', errorData);
-      return { status: response.status }; // 상태 코드 반환
-    }
 
-    return response;
-
-  } catch (e) {
-    console.log('There has been a problem with your fetch operation', e);
-    return { status: 500 };
-  }
-}
 
 export const getChatRoomData = async (nickname:string) => {
   try {
@@ -47,10 +28,10 @@ export const getChatRoomDetails = async (chatRoomId: any) => {
   }
 };
 
-export const deleteChatRoomsService = async (chatRoomIds: string[]) => {
+export const deleteChatRoomsService = async (chatRoomIds: string[],nickname: string) => {
   if (chatRoomIds.length === 0) {
     throw new Error("삭제할 채팅방이 없습니다.");
   }
 
-  await Promise.all(chatRoomIds.map(id => deleteChatRoomApi(id)));
+  await Promise.all(chatRoomIds.map(id => deleteChatRoomApi(id,nickname)));
 };

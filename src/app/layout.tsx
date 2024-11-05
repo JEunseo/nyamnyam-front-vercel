@@ -6,6 +6,7 @@ import ModalWishlist from './modal/ModalWishlist';
 import GlobalProvider from './GlobalProvider';
 
 import '@/styles/styles.scss'
+import { UserProvider } from './context/UserContext';
 
 
 
@@ -44,9 +45,11 @@ export default function RootLayout({
           </WishlistProvider>
         </SearchProvider> */}
       <GlobalProvider>
-        <Header />
-        <main style={{ padding: '5%', overflow: 'hidden' }}>{children}</main>
-        <ModalWishlist />
+        <UserProvider>
+          <Header />
+          <main style={{ padding: '5%', overflow: 'hidden' }}>{children}</main>
+          <ModalWishlist />
+        </UserProvider>
       </GlobalProvider>
       </body>
       </html>

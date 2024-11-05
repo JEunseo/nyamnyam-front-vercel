@@ -1,5 +1,11 @@
 export const customFetch = async (url: string, options: RequestInit = {}) => {
-    const token = localStorage.getItem('token');
+    //const token = localStorage.getItem('token');
+    let token: string | null = null;
+
+if (typeof window !== "undefined") {
+    // 브라우저 환경에서만 localStorage 접근
+    token = localStorage.getItem('token');
+}
 
     const defaultHeaders = {
         'Authorization': token ? `Bearer ${token}` : '',

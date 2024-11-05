@@ -6,7 +6,7 @@ if (typeof window !== "undefined") {
 }
 
 export const fetchUserExists = async (id: string): Promise<boolean> => {
-    const response = await fetch(`http://localhost:8080/api/user/existsById?id=${id}`,{
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/existsById?id=${id}`,{
         method: "GET",
         headers: {
             'Authorization': token ? `Bearer ${token}` : '', // JWT 토큰을 Bearer 형식으로 추가
@@ -19,7 +19,7 @@ export const fetchUserExists = async (id: string): Promise<boolean> => {
 };
 
 export const fetchUserById = async (id: string): Promise<User> => {
-    const response = await fetch(`http://localhost:8080/api/user/findById?id=${id}`,{
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/findById?id=${id}`,{
         method: "GET",
         headers: {
             'Authorization': token ? `Bearer ${token}` : '', // JWT 토큰을 Bearer 형식으로 추가
@@ -32,7 +32,7 @@ export const fetchUserById = async (id: string): Promise<User> => {
 };
 
 export const fetchAllUsers = async (): Promise<User[]> => {
-    const response = await fetch(`http://localhost:8080/api/user/findAll`,{
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/findAll`,{
         method: "GET",
         headers: {
             'Authorization': token ? `Bearer ${token}` : '',
@@ -46,7 +46,7 @@ export const fetchAllUsers = async (): Promise<User[]> => {
 };
 
 export const fetchUserCount = async (): Promise<number> => {
-    const response = await fetch(`http://localhost:8080/api/user/count`);
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/count`);
     if (!response.ok) {
         throw new Error('Failed to fetch user count');
     }
@@ -54,7 +54,7 @@ export const fetchUserCount = async (): Promise<number> => {
 };
 
 export const deleteUserById = async (id: string): Promise<void> => {
-    const response = await fetch(`http://localhost:8080/api/user/deleteById?id=${id}`, {
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/deleteById?id=${id}`, {
         method: 'DELETE',
     });
     if (!response.ok) {
@@ -63,7 +63,7 @@ export const deleteUserById = async (id: string): Promise<void> => {
 };
 
 export const updateUser = async (user: User): Promise<User> => {
-    const response = await fetch(`http://localhost:8080/api/user/update`, {
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/update`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export const registerUser = async (user: User, thumbnails: File[]): Promise<User
         formData.append(`thumbnails`, thumbnail);
     });
 
-    const response = await fetch(`http://localhost:8080/api/user/join`, {
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/join`, {
         method: 'POST',
         body: formData,
     });
@@ -98,7 +98,7 @@ export const registerUser = async (user: User, thumbnails: File[]): Promise<User
 
 
 export const loginUser = async (username: string, password: string): Promise<string> => {
-    const response = await fetch(`http://localhost:8080/api/user/login?username=${username}&password=${password}`, {
+    const response = await fetch(`https://abc.nyamnyam.kr/api/user/login?username=${username}&password=${password}`, {
         method: 'POST',
     });
 
@@ -121,7 +121,7 @@ export const uploadThumbnailApi = async (thumbnails: File[]): Promise<number[]> 
         formData.append('images', thumbnail);
     });
 
-    const response = await fetch('http://localhost:8080/api/thumbnails/upload', {
+    const response = await fetch('https://abc.nyamnyam.kr/api/thumbnails/upload', {
         method: 'POST',
         body: formData,
     });
