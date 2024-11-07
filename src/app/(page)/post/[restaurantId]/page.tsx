@@ -25,9 +25,9 @@ import Modal from 'src/app/components/Modal';
 import { fetchReportRegister } from '@/app/service/report/report.service';
 import { PostListProps } from '@/app/model/props';
 import nookies from 'nookies';
-import {User} from "@/app/model/user.model";
+import { User } from "@/app/model/user.model";
 import Account from "@/app/(page)/user/account/page";
-import {getUserById} from "@/app/service/user/user.service";
+import { getUserById, increaseScore, decreaseScore } from "@/app/service/user/user.service";
 import ReplyHandler from './reply/page';
 
 const PostList: React.FC<Partial<PostListProps>> = ({ restaurantId }) => {
@@ -54,7 +54,9 @@ const PostList: React.FC<Partial<PostListProps>> = ({ restaurantId }) => {
     const currentUserId = nookies.get().userId;
     const nickname = localStorage.getItem('nickname') || '';
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [deletePostId, setDeletePostId] = useState<number>();
 
     // 신고하기
     const reportReasons = [
@@ -144,25 +146,33 @@ const PostList: React.FC<Partial<PostListProps>> = ({ restaurantId }) => {
         setIsOpen(false);
     }
 
-    const handleDelete = async (postId: number) => {
-        if (window.confirm("게시글을 삭제하시겠습니까?")) {
-            const success = await postService.remove(postId);
+    const handleDelete = (postId: number) => {
+        setAlertMessage("게시글을 삭제하시겠습니까?");
+        setDeletePostId(postId);
+        setAlertOpen(true);
+    };
+
+    const handleConfirmDelete = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (deletePostId) {
+            const success = await postService.remove(deletePostId);
 
             if (success) {
-                alert("게시글이 삭제되었습니다.");
-                setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+                
+                setAlertOpen(false);
+                setPosts((prevPosts) => prevPosts.filter((post) => post.id !== deletePostId));
 
                 setImages((prevImages) => {
                     const updatedImages = { ...prevImages };
-                    delete updatedImages[postId];
+                    delete updatedImages[deletePostId];
                     return updatedImages;
-                })
+                });
 
-                const updatedDetails = imgDetails.filter((detail) => detail.postId !== postId);
+                const updatedDetails = imgDetails.filter((detail) => detail.postId !== deletePostId);
                 setImgDetails(updatedDetails);
-
                 setAllImages(updatedDetails.map((detail) => detail.url));
-
+                
                 router.push(`/restaurant/${restaurantId}`);
             }
         }
@@ -184,7 +194,7 @@ const PostList: React.FC<Partial<PostListProps>> = ({ restaurantId }) => {
 
     // View More
     const handleViewMore = () => {
-        if(visible >= sortedPosts.length){
+        if (visible >= sortedPosts.length) {
             setVisible(2);
         } else {
             setVisible((prevVisible) => prevVisible + 2);
@@ -229,9 +239,17 @@ const PostList: React.FC<Partial<PostListProps>> = ({ restaurantId }) => {
             setLikeCounts((prevCounts) => ({
                 ...prevCounts,
                 [postId]: (prevCounts[postId] || 0) + result.likeCountDelta,
-            }))
+            }));
+
+            // 좋아요 추가 또는 취소에 따라 점수 업데이트 호출
+            if (result.likeCountDelta > 0) {
+                await increaseScore(postUserId); // 좋아요 추가 시
+            } else {
+                await decreaseScore(postUserId); // 좋아요 취소 시
+            }
         }
     };
+
 
     // 신고하기
     const postReport = async (postId: number) => {
@@ -440,13 +458,35 @@ const PostList: React.FC<Partial<PostListProps>> = ({ restaurantId }) => {
                                                 <Star w="w-4" h="h-4" readonly={true} rate={p.averageRating} />
                                                 <p className='ml-2'>{p.averageRating.toFixed(1)} / 5</p>
                                             </div>
-                                            <PostOptions
-                                                postUserId={p.userId ?? ''}
-                                                currentId={currentUserId}
-                                                onEdit={() => { router.push(`/post/${restaurantId}/update/${p.id}`) }}
-                                                onDelete={() => handleDelete(p.id)}
-                                                onReport={() => handleReportClick(p.id)}
-                                            />
+                                            <div>
+                                                <PostOptions
+                                                    postUserId={p.userId ?? ''}
+                                                    currentId={currentUserId}
+                                                    onEdit={() => { router.push(`/post/${restaurantId}/update/${p.id}`) }}
+                                                    onDelete={() => handleDelete(p.id)}
+                                                    onReport={() => handleReportClick(p.id)}
+                                                />
+                                                <Modal isOpen={alertOpen} onClose={() => setAlertOpen(false)}>
+                                                    <div className="p-4 text-center mt-5">
+                                                        <h3 className="font-semibold text-lg">{alertMessage}</h3>
+                                                        <button
+                                                            className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-200 mr-4"
+                                                            onClick={handleConfirmDelete}
+                                                        >
+                                                            확인
+                                                        </button>
+                                                        <button
+                                                            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200"
+                                                            onClick={() => setAlertOpen(false)}
+                                                        >
+                                                            취소
+                                                        </button>
+                                                    </div>
+                                                </Modal>
+
+
+                                            </div>
+
                                         </div>
                                         {reportingPostId === p.id && (
                                             <div className="mt-4">

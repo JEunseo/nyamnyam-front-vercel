@@ -6,7 +6,6 @@ export interface ChatRoomModel {
     participants: string[]; // List of participant IDs
 
 
-    unreadCount: number; 
+    unreadCount: number;
     notReadParticipantsCount: number;
 }
-

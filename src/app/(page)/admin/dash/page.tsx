@@ -118,9 +118,9 @@ export default function AdminDash() {
                                             className='md:w-[140px] w-[120px] md:h-[140px] h-[120px] rounded-full'
                                         />
                                     </div>
-                                    <div className="name heading6 mt-4 text-center">Tony Nguyen</div>
+                                    <div className="name heading6 mt-4 text-center">{user.nickname}</div>
                                     <div
-                                        className="mail heading6 font-normal normal-case text-secondary text-center mt-1">hi.avitex@gmail.com
+                                        className="mail heading6 font-normal normal-case text-secondary text-center mt-1">Role : {user.role}
                                     </div>
                                 </div>
                                 <div className="menu-tab w-full max-w-none lg:mt-10 mt-6">

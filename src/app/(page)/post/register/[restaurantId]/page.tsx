@@ -92,7 +92,8 @@ export default function PostRegister() {
       clean: formData.clean,
       service: formData.service,
       tags: tags,
-      restaurantId: formData.restaurantId
+      restaurantId: formData.restaurantId,
+      enabled: 1
     };
     
     const newFormData = new FormData();

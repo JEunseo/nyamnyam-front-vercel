@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {fetchAllUsers, fetchUserById} from "@/app/api/user/user.api";
+import {fetchAllUsers, fetchUserById, toggleEnable} from "@/app/api/user/user.api";
 import { User } from "@/app/model/user.model";
 import Modal from "@/app/components/Modal";
 import Account from "@/app/(page)/user/account/page";
@@ -29,7 +29,6 @@ const UserTable = ({ users = [] }) => {
     const indexOfLastUser = currentPage * itemsPerPage;
     const indexOfFirstUser = indexOfLastUser - itemsPerPage;
 
-
     const sortedUsers = [...users].sort((a, b) => {
         const isAsc = sortDirection === 'asc';
         if (a[sortColumn] < b[sortColumn]) {
@@ -56,6 +55,15 @@ const UserTable = ({ users = [] }) => {
         }
     };
 
+    const handleToggleEnable = async (userId: string, currentStatus: boolean) => {
+        try {
+            await toggleEnable(userId, !currentStatus);
+            // 상태 변경 후 사용자 목록을 새로고침
+            setSelectedUser({ ...selectedUser, enabled: !currentStatus } as User);
+        } catch (error) {
+            console.error("Failed to toggle enable status");
+        }
+    };
 
     if (user?.role !== 'ADMIN') {
         return (
@@ -81,38 +89,43 @@ const UserTable = ({ users = [] }) => {
         setSortColumn(column);
     };
 
-
     return (
         <div className="list overflow-x-auto w-full mt-5">
             <table className="w-full max-[1400px]:w-[700px] max-md:w-[700px]">
                 <thead className="border-b border-line">
                 <tr>
-                    <th scope="col" className="pb-3 text-left text-sm font-bold uppercase text-secondary whitespace-nowrap">
-                        username
+                    <th className="pb-3 text-left text-sm font-bold uppercase text-secondary whitespace-nowrap">
+                        Enable
                     </th>
-                    <th scope="col" className="pb-3 text-left text-sm font-bold uppercase text-secondary whitespace-nowrap">
-                        nickname
+                    <th className="pb-3 text-left text-sm font-bold uppercase text-secondary whitespace-nowrap">
+                        Username
                     </th>
-                    <th scope="col" className="pb-3 text-left text-sm font-bold uppercase text-secondary whitespace-nowrap" onClick={() => handleSort('role')}>
-                        role
+                    <th className="pb-3 text-left text-sm font-bold uppercase text-secondary whitespace-nowrap">
+                        Nickname
                     </th>
-                    <th scope="col" className="pb-3 text-right text-sm font-bold uppercase text-secondary whitespace-nowrap" onClick={() => handleSort('score')}>
-                        score
+                    <th className="pb-3 text-left text-sm font-bold uppercase text-secondary whitespace-nowrap">
+                        Role
+                    </th>
+                    <th className="pb-3 text-right text-sm font-bold uppercase text-secondary whitespace-nowrap">
+                        Score
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 {currentUsers.map((u) => (
                     <tr className="item duration-300 border-b border-line" key={u.username} onClick={() => openModal(u)}>
-                        <th scope="row" className="py-3 text-left">
-                            <strong className="text-title cursor-pointer">{u.username}</strong>
-                        </th>
-                        <td className="py-3 cursor-pointer">
-                            <div className="info flex flex-col">
-                                <strong className="product_name text-button">{u.nickname}</strong>
-                            </div>
+                        <td className="py-3 text-left">
+                            <input
+                                type="checkbox"
+                                checked={u.enabled}
+                                onChange={() => handleToggleEnable(u.id, u.enabled)}
+                            />
                         </td>
-                        <td className="py-3 price">{u.role}</td>
+                        <td className="py-3 text-left">
+                            <strong className="text-title cursor-pointer">{u.username}</strong>
+                        </td>
+                        <td className="py-3">{u.nickname}</td>
+                        <td className="py-3">{u.role}</td>
                         <td className="py-3 text-right">
                                 <span className={`tag px-4 py-1.5 rounded-full bg-opacity-10 ${u.score < 40 ? 'bg-sky-500 text-sky-500' :
                                     u.score < 50 ? 'bg-green-400 text-green-400' :
@@ -161,3 +174,4 @@ export default function UserList() {
         </div>
     );
 }
+

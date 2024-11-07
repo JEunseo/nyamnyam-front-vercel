@@ -24,6 +24,7 @@ import FollowList from "@/app/(page)/user/follow/page";
 import {fetchInsertOpinion} from "@/app/service/opinion/opinion.serivce";
 import {removeUserById} from "@/app/service/user/user.service";
 import EditProfile from "@/app/(page)/user/update/page";
+import Modal from "@/app/components/Modal";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, CategoryScale, LinearScale);
 
@@ -36,6 +37,10 @@ export default function MyPage() {
     const [follower, setFollower] = useState<FollowModel[]>([]);
     const [following, setFollowing] = useState<FollowModel[]>([]);
     const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const [mounted, setMounted] = useState<boolean>(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
 
     const { searchTerm } = useSearchContext();
     const router = useRouter();
@@ -83,6 +88,10 @@ export default function MyPage() {
         follow();
     }, [user]);
 
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
 
 
     useEffect(() => {
@@ -125,18 +134,21 @@ export default function MyPage() {
         }
     };
 
-    // 회원 탈퇴 함수
-    const handleDeleteAccount = async () => {
-        if (window.confirm("정말 탈퇴하시겠습니까?")) {
-            try {
-                await removeUserById(userId);
-                alert("회원 탈퇴가 완료되었습니다.");
-                router.push("/"); // 탈퇴 후 메인 페이지로 이동
-            } catch (error) {
-                console.error("회원 탈퇴 실패:", error);
-                alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
-            }
+    const handleDeleteAccount = () => {
+        setAlertMessage("정말 탈퇴하시겠습니까?");
+        setAlertOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        try {
+            await removeUserById(userId); // 실제 탈퇴 요청
+            alert("회원 탈퇴가 완료되었습니다.");
+            router.push("/"); // 탈퇴 후 메인 페이지로 이동
+        } catch (error) {
+            console.error("회원 탈퇴 실패:", error);
+            alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
         }
+        setAlertOpen(false); // Modal 닫기
     };
 
     const countData = {
@@ -152,18 +164,6 @@ export default function MyPage() {
         ],
     };
 
-
-    const restaurantData = {
-        labels: restaurant.map(item => item.restaurantName),
-        datasets: [{
-
-            label: 'RestaurantRank',
-            data: restaurant.map(item => item.total),
-            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            borderColor: 'rgba(255, 159, 64, 1)',
-            borderWidth: 1,
-        }],
-    };
 
 
     const totalFollower = follower.length;
@@ -245,17 +245,36 @@ export default function MyPage() {
                                     <button
                                         onClick={handleDeleteAccount}
                                         className="item flex items-center gap-3 w-full px-5 py-4 rounded-lg cursor-pointer duration-300 mt-1.5"
-                                        style={{ backgroundColor: '#FF0000', color: '#FFFFFF' }}>
-                                        <Icon.Trash size={20} />
+                                        style={{backgroundColor: '#FF0000', color: '#FFFFFF'}}>
+                                        <Icon.Trash size={20}/>
                                         <strong className="heading6">회원 탈퇴</strong>
                                     </button>
+
+                                    <Modal isOpen={alertOpen} onClose={() => setAlertOpen(false)}>
+                                        <div className="p-4 text-center mt-5">
+                                            <h3 className="font-semibold text-lg">{alertMessage}</h3>
+                                            <button
+                                                className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-200 mr-4" // 오른쪽에 간격 추가
+                                                onClick={handleConfirmDelete}
+                                            >
+                                                확인
+                                            </button>
+                                            <button
+                                                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200"
+                                                onClick={() => setAlertOpen(false)}
+                                            >
+                                                취소
+                                            </button>
+                                        </div>
+                                    </Modal>
                                 </div>
                             </div>
                         </div>
                         <div className="right md:w-2/3 w-full pl-2.5">
                             <div className={`tab text-content w-full ${activeTab === 'myPage' ? 'block' : 'hidden'}`}>
-                                <div className="overview grid sm:grid-cols-3 gap-5 mt-7 ">
-                                    <div className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs w-full ">
+                            <div className="overview grid sm:grid-cols-3 gap-5 mt-7 ">
+                                    <div
+                                        className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs w-full ">
                                         <Link href="/receipt/insertReceipt">
                                             <div className="counter">
                                                 <span className="tese text-orange-700">Receipt</span>

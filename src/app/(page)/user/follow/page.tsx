@@ -50,11 +50,10 @@ export default function FollowList() {
 
     return (
         <>
-            {/* 탭 버튼 */}
-            <div className="flex space-x-4">
+            <div className="flex justify-center space-x-8 text-center">
                 <div className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs">
                     <button
-                        className={`py-2 px-4 ${activeTab === 0 ? 'border-b-4 border-b-green-700' : ''}`}
+                        className={`py-1 px-4 ${activeTab === 0 ? 'border-b-4 border-b-green-700' : ''}`}
                         onClick={() => setActiveTab(0)}
                     >
                         팔로우
@@ -62,7 +61,7 @@ export default function FollowList() {
                 </div>
                 <div className="item flex items-center justify-between p-5 border border-line rounded-lg box-shadow-xs">
                     <button
-                        className={`py-2 px-4 ${activeTab === 1 ? 'border-b-4 border-b-green-700' : ''}`}
+                        className={`py-1 px-4 ${activeTab === 1 ? 'border-b-4 border-b-green-700' : ''}`}
                         onClick={() => setActiveTab(1)}
                     >
                         팔로잉
@@ -70,38 +69,47 @@ export default function FollowList() {
                 </div>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 text-center">
                 {activeTab === 0 && (
                     <div>
-                        <h2 className="text-lg font-bold">팔로워 목록</h2>
                         {follower.length > 0 ? (
                             follower.map((follow) => (
                                 <div key={follow.id} className="p-2 border-b border-gray-300">
-                                    {follow.following}
+                        <span className="tag px-4 py-1.5 rounded-full bg-blue-100 text-blue-800">
+                            {follow.following}
+                        </span>
                                 </div>
                             ))
                         ) : (
-                            <p>팔로워가 없습니다.</p>
+                            <span className="tag px-4 py-1.5 rounded-full bg-red-100 text-red-500">
+                           팔로워가 없습니다.
+                        </span>
                         )}
                     </div>
                 )}
                 {activeTab === 1 && (
                     <div>
-                        <h2 className="text-lg font-bold">팔로잉 목록</h2>
                         {following.length > 0 ? (
                             following.map((follow) => (
-                                <div key={follow.id} className="p-2 border-b border-gray-300">
-                                    {follow.follower}
+                                <div key={follow.id} className="p-2  border-gray-300">
+                        <span className="tag px-4 py-1.5 rounded-full bg-green-100 text-green-800">
+                            {follow.follower}
+                        </span>
                                 </div>
                             ))
                         ) : (
-                            <p>팔로잉한 사람이 없습니다.</p>
-                        )}
+                            <span className="tag px-4 py-1.5 rounded-full bg-red-100 text-red-500">
+                           팔로잉한 사람이 없습니다.
+                        </span>
+
+                            )}
                     </div>
                 )}
             </div>
+
+
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-                {selectedUser && <Account selectUser={selectedUser} />}
+                {selectedUser && <Account selectUser={selectedUser}/>}
             </Modal>
         </>
     );

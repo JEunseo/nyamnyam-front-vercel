@@ -9,6 +9,8 @@ import {
     updateUser,
     registerUser,
     loginUser, uploadThumbnailApi,
+    toggleEnable as toggleEnableApi,
+    increaseScoreApi,decreaseScoreApi,
 } from "src/app/api/user/user.api";
 
 // 사용자 존재 여부 확인 서비스
@@ -82,6 +84,19 @@ export const addUser = async (
 // 사용자 로그인 서비스
 export const authenticateUser = async (username: string, password: string): Promise<string> => {
     return await loginUser(username, password);
+};
+
+export const toggleEnable = async (userId: string, enabled: boolean): Promise<void> => {
+    await toggleEnableApi(userId, enabled);
+};
+
+export const increaseScore = async (userId: string): Promise<void> => {
+    await increaseScoreApi(userId);
+};
+
+// 점수 감소 서비스
+export const decreaseScore = async (userId: string): Promise<void> => {
+    await decreaseScoreApi(userId);
 };
 
 

@@ -1,4 +1,5 @@
 "use client"
+import Modal from '@/app/components/Modal';
 import { ReplyModel } from '@/app/model/reply.model';
 import { replyService } from '@/app/service/reply/reply.service';
 import nookies from 'nookies';
@@ -11,6 +12,8 @@ const ReplyHandler: React.FC<Partial<{ postId: number; initialReplies: ReplyMode
     const [replyInput, setReplyInput] = useState<{ [key: number]: string }>({});
     const [editReply, setEditReply] = useState<{ [key: number]: boolean }>({});
     const [editInput, setEditInput] = useState<{ [key: number]: string }>({});
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
     const currentUserId = nookies.get().userId;
     const nickname = localStorage.getItem('nickname') || '';
 
@@ -91,10 +94,13 @@ const ReplyHandler: React.FC<Partial<{ postId: number; initialReplies: ReplyMode
         }
     };
 
-    // 댓글 삭제 
-    const replyDelete = async (replyId: number, postId: number) => {
-        if (!window.confirm("댓글을 삭제하시겠습니까?")) return;
+    // 댓글 삭제 Modal 
+    const handleDelete = () => {
+        setAlertMessage("댓글을 삭제하시겠습니까?");
+        setAlertOpen(true);
+    };
 
+    const replyDelete = async (replyId: number, postId: number) => {
         const updatedReplies = await replyService.remove(replyId, postId, localReplies[postId]);
 
         if (updatedReplies) {
@@ -103,6 +109,7 @@ const ReplyHandler: React.FC<Partial<{ postId: number; initialReplies: ReplyMode
                 [postId]: updatedReplies
             }));
         }
+        setAlertOpen(false);
     };
 
     // 날짜 포맷 지정 
@@ -162,10 +169,28 @@ const ReplyHandler: React.FC<Partial<{ postId: number; initialReplies: ReplyMode
                                         <button
                                             className="button-main custom-button mr-2 px-4 py-2 bg-green-500 text-white rounded"
                                             style={{ marginRight: '5px' }}
-                                            onClick={() => reply.id && replyDelete(reply.id, postId)}
+                                            onClick={handleDelete}
                                         >
                                             삭제
                                         </button>
+
+                                        <Modal isOpen={alertOpen} onClose={() => setAlertOpen(false)}>
+                                        <div className="p-4 text-center mt-5">
+                                            <h3 className="font-semibold text-lg">{alertMessage}</h3>
+                                            <button
+                                                className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition duration-200 mr-4" // 오른쪽에 간격 추가
+                                                onClick={() => reply.id && replyDelete(reply.id, postId)}
+                                            >
+                                                삭제
+                                            </button>
+                                            <button
+                                                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200"
+                                                onClick={() => setAlertOpen(false)}
+                                            >
+                                                취소
+                                            </button>
+                                        </div>
+                                        </Modal>
                                     </div>
                                 )}
                             </li>

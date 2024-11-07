@@ -17,6 +17,7 @@ interface CalendarEvent {
     date: string;
     color?: string;
     extendedProps?: Todo;
+    id: string;  // Add a unique ID for each event
 }
 
 const MyCalendar: React.FC = () => {
@@ -29,7 +30,7 @@ const MyCalendar: React.FC = () => {
     const handleToggle = (eventId: string) => {
         setOpenDropdowns(prevState => ({
             ...prevState,
-            [eventId]: !prevState[eventId]
+            [eventId]: !prevState[eventId]  // Toggle the state of the dropdown
         }));
     };
 
@@ -47,7 +48,7 @@ const MyCalendar: React.FC = () => {
     }, [id]);
 
     useEffect(() => {
-        const walletEvents: CalendarEvent[] = wallet.map((item) => {
+        const walletEvents: CalendarEvent[] = wallet.map((item, index) => {
             const eventDate = new Date(item.date);
             const isoDate = eventDate.toISOString().split('T')[0];
             return {
@@ -56,16 +57,17 @@ const MyCalendar: React.FC = () => {
                 color: '#43aaad',
                 extendedProps: {
                     todo: [`지출: ${item.price}`]
-                }
+                },
+                id: `event-${index}`  // Unique ID for each event
             };
         });
 
-        setFilteredEvents([...walletEvents]);
+        setFilteredEvents(walletEvents);
     }, [wallet]);
 
     const renderEventContent = (eventInfo: EventContentArg) => {
         const todos = eventInfo.event.extendedProps?.todo || [];
-        const eventId = eventInfo.event.title;
+        const eventId = eventInfo.event.id;  // Use event's unique ID
 
         return (
             <Dropdown show={openDropdowns[eventId]} onToggle={() => handleToggle(eventId)}>

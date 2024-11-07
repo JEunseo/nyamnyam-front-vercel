@@ -6,8 +6,7 @@ import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { jwtDecode } from 'jwt-decode';
 import nookies from 'nookies';
 
-import { authenticateUser } from "@/app/service/user/user.service";
-import { useUserContext } from '@/app/context/UserContext';
+import {authenticateUser} from "@/app/service/user/user.service";
 
 interface DecodedToken {
     sub: string;
@@ -23,7 +22,6 @@ export default function Home() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const { setUser } = useUserContext(); // user context의 setUser 메소드 사용
 
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,21 +41,22 @@ export default function Home() {
             localStorage.setItem('role', decoded.role);
             localStorage.setItem('score', String(decoded.score));
 
-            // setUser를 호출하여 사용자 정보를 업데이트
-            setUser({
-                token: token,
-                username: decoded.nickname,
-                nickname: decoded.nickname,
-                role: decoded.role,
-                userId: decoded.sub,
-            });
             // 홈 페이지로 이동
             router.push("/");
-        } catch (error) {
+        } catch (error: any) {
             console.error('Login failed:', error);
-            setErrorMessage('Invalid username or password');
+
+            if (error.message === "Account is disabled") {
+                setErrorMessage("해당 계정은 차단되었습니다. 관리자에게 문의해 주세요.");
+            } else if (error.message === "Invalid username or password") {
+                setErrorMessage("아이디 또는 비밀번호가 올바르지 않습니다.");
+            } else {
+                setErrorMessage("로그인에 실패했습니다. 다시 시도해 주세요.");
+            }
         }
     };
+
+
 
 
     return (
@@ -69,13 +68,13 @@ export default function Home() {
                         <form className="md:mt-7 mt-4" onSubmit={handleLogin}>
                             <div className="username">
                                 <input className="border-line px-4 pt-3 pb-3 w-full rounded-lg" id="username"
-                                    type="username" placeholder="username" required
-                                    value={username} onChange={(e) => setUsername(e.target.value)} />
+                                       type="username" placeholder="username" required
+                                       value={username} onChange={(e) => setUsername(e.target.value)} />
                             </div>
                             <div className="pass mt-5">
                                 <input className="border-line px-4 pt-3 pb-3 w-full rounded-lg" id="password"
-                                    type="password" placeholder="Password *" required
-                                    value={password} onChange={(e) => setPassword(e.target.value)} />
+                                       type="password" placeholder="Password *" required
+                                       value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                             <div className="flex items-center justify-between mt-5">
                                 <div className='flex items-center'>

@@ -96,13 +96,13 @@ export default function Account(selectUser: Partial<AccountProps>) {
         console.log(result);
         if (result.status === 200) {
             alert("채팅방이 성공적으로 생성되었습니다.");
-             // 채팅방 정보를 URL 쿼리 파라미터로 전달
-             const createdChatRoom = result.data;
-             console.log(createdChatRoom); 
-             router.push(`/chatRoom?id=${createdChatRoom.id}`); // 생성된 채팅방의 ID와 이름을 쿼리로 전달           
+            // 채팅방 정보를 URL 쿼리 파라미터로 전달
+            const createdChatRoom = result.data;
+            console.log(createdChatRoom);
+            router.push(`/chatRoom?id=${createdChatRoom.id}`); // 생성된 채팅방의 ID와 이름을 쿼리로 전달
         }
 
-          
+
     };
 
 
@@ -121,7 +121,12 @@ export default function Account(selectUser: Partial<AccountProps>) {
                     </div>
                     <div className="name heading6 mt-4 text-left">{selectUser?.selectUser?.nickname}</div>
                     <div className="mail heading6 font-normal normal-case text-secondary mt-1 text-sm text-left">
-                        냠냠온도: {selectUser?.selectUser?.score}
+
+                        <span className="text-border"> 냠냠온도: </span>
+
+                        <span className="tag px-4 py-1.5 rounded-full bg-blue-100 text-blue-800">
+                            {selectUser?.selectUser?.score}
+                        </span>
                     </div>
                 </div>
                 <div className="menu-tab w-full max-w-none lg:mt-10 mt-6">
@@ -133,7 +138,7 @@ export default function Account(selectUser: Partial<AccountProps>) {
                     selectUser.selectUser?.id === userId ? (
                         <Link href="/user/follow" passHref>
                             <button type="submit"
-                                className="px-4 py-2 bg-[#41B3A3] text-white rounded hover:bg-[#178E7F]">
+                                    className="px-4 py-2 bg-[#41B3A3] text-white rounded hover:bg-[#178E7F]">
                                 팔로우
                             </button>
                         </Link>
@@ -145,7 +150,7 @@ export default function Account(selectUser: Partial<AccountProps>) {
                         </button>
                     ) : (
                         <button onClick={handleFollow}
-                            className="px-4 py-2 bg-[#41B3A3] text-white rounded hover:bg-[#178E7F]">
+                                className="px-4 py-2 bg-[#41B3A3] text-white rounded hover:bg-[#178E7F]">
                             팔로우하기
                         </button>
                     )

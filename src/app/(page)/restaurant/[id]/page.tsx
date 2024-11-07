@@ -26,6 +26,8 @@ export default function Restaurant() {
 
     useEffect(() => {
         const fetchData = async () => {
+            console.log(location.origin);
+            
             try {
                 const { restaurants } = await getRestaurantDetails(Number(id));
                 setRestaurant(restaurants);
@@ -202,6 +204,7 @@ export default function Restaurant() {
                         <div style={{ borderTop: '1px solid #e0e0e0' }} className='my-30'>
                             <PostList restaurantId={restaurantId} />
                         </div>
+                        
                     </div>
             </div>
         </div>
