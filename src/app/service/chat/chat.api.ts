@@ -4,7 +4,7 @@ import { sendChat, subscribeToChats } from "src/app/api/chat/chat.api";
 // 채팅 메시지 스트리밍 서비스 함수
 export const subscribeMessages = (chatRoomId: any, onMessageReceived: (arg0: any) => void) => {
   try {
-
+     
     return subscribeToChats(chatRoomId, onMessageReceived); // 구독 해제 함수를 반환
   } catch (error) {
     console.error("메시지 구독 중 오류 발생:", error);
