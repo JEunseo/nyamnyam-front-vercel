@@ -6,9 +6,10 @@ import nookies from "nookies";
 import Link from "next/link";
 import { fetchDeleteFollow, fetchIsFollow, fetchRegisterFollow } from "@/app/service/follow/follow.service";
 import { FollowModel } from "@/app/model/follow.model";
-import { insertChatRoom } from '@/app/service/chatRoom/chatRoom.api';
+
 import { useRouter } from 'next/navigation';
 import {fetchUserById} from "@/app/api/user/user.api";
+import { insertChatRoom } from '@/app/api/chatRoom/chatRoom.api';
 
 interface AccountProps {
     selectUser: User;
