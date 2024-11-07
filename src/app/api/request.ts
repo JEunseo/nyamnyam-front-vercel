@@ -12,6 +12,7 @@ export const api = {
     reply: "/api/replies",
     report: "/api/report",
     restaurant: "api/restaurant",
+    restaurants: "api/restaurants",
     tag: "/api/tags",
     user: "/api/user",
     wishList: "/api/wishList",

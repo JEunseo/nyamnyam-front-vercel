@@ -33,10 +33,9 @@ const fetchRestaurantAll = async () => {
 // post에 restaurant 정보 불러오기
 export const fetchRestaurant = async (restaurantId: number) => {
     try{
-        const response = await instance.get(`${api.restaurant}/${restaurantId}`);
+        const response = await instance.get(`${api.restaurants}/${restaurantId}`);
         return response.data;
     } catch (error){
-    console.error('post restaurant failed:', error);
     throw error;
     }
 };
